@@ -4,10 +4,9 @@ import {persistStore} from 'redux-persist';
 import {PersistGate} from 'redux-persist/integration/react';
 
 import './config/reactotron';
-import store from './store';
+import {store, persistor} from './store';
 
 import RepositoryList from './components/RepositoryList';
-const persistor = persistStore(store);
 
 const App = () => (
   <Provider store={store}>

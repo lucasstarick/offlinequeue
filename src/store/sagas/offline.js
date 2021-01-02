@@ -4,17 +4,17 @@ import NetInfo from '@react-native-community/netinfo';
 import {OFFLINE, ONLINE} from 'redux-offline-queue';
 
 export function* startWatchingNetworkConnectivity() {
-  const channel = eventChannel((listener) => {
-    const handleConnectivityChange = ({isConnected}) => {
-      listener(isConnected);
-    };
+  const channel = eventChannel((emitter) => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      let allowConnection = state.isConnected;
 
-    const unsubscribe = NetInfo.addEventListener(handleConnectivityChange);
+      emitter(allowConnection);
+    });
     return () => unsubscribe();
   });
 
   try {
-    while (true) {
+    for (;;) {
       const isConnected = yield take(channel);
 
       if (isConnected) {
